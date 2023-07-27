@@ -86,7 +86,7 @@ public class DefaultFxViewLoader implements FxViewLoader {
         if (urlString == null || urlString.isEmpty() || urlString.isBlank()) {
             throw new ViewLoadException("FXML URL is empty");
         }
-        var target = this.getClass().getResource(urlString);
+        var target = ClassLoader.getSystemResource(urlString);
         if(target == null && Files.exists(Path.of(urlString))) {
             target = new File(urlString).toURI().toURL();
         }
