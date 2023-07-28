@@ -4,6 +4,8 @@ import co.bitshifted.snapfx.NamedValues;
 import co.bitshifted.snapfx.error.ModelLoadException;
 import co.bitshifted.snapfx.annotations.FxEventHandler;
 import co.bitshifted.snapfx.annotations.FxListener;
+import co.bitshifted.snapfx.eventbus.EventBus;
+import co.bitshifted.snapfx.eventbus.internal.DefaultEVentBus;
 import co.bitshifted.snapfx.l10n.*;
 import co.bitshifted.snapfx.l10n.ui.LocaleComboBoxInitializer;
 import co.bitshifted.snapfx.annotations.ModelData;
@@ -36,6 +38,7 @@ public class SnapFxGuiceModule extends AbstractModule {
         bind(FxViewLoader.class).to(DefaultFxViewLoader.class).in(Scopes.SINGLETON);
         bind(LocaleManager.class).to(DefaultLocaleManager.class).in(Scopes.SINGLETON);
         bind(ResourceBundleManager.class).to(DefaultResourceBundleManager.class).in(Scopes.SINGLETON);
+        bind(EventBus.class).to(DefaultEVentBus.class).in(Scopes.SINGLETON);
         // UI components and utils
         bind(new TypeLiteral<Consumer<ComboBox<Locale>>>(){})
                 .annotatedWith(Names.named(NamedValues.LOCALE_COMBO_INITIALIZER)).to(LocaleComboBoxInitializer.class);
