@@ -1,6 +1,6 @@
 package co.bitshifted.snapfx.eventbus.internal;
 
-import co.bitshifted.snapfx.annotations.EventHandler;
+import co.bitshifted.snapfx.annotations.EventBusSubscriptionHandler;
 import co.bitshifted.snapfx.eventbus.Event;
 import co.bitshifted.snapfx.eventbus.EventBus;
 
@@ -58,7 +58,7 @@ public class DefaultEVentBus implements EventBus {
     private Method getEventHandlerMethod(Object receiver, Class eventClass) {
         var methods = receiver.getClass().getDeclaredMethods();
         var method = Stream.of(methods)
-                .filter(m -> m.isAnnotationPresent(EventHandler.class))
+                .filter(m -> m.isAnnotationPresent(EventBusSubscriptionHandler.class))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("Failed to find @EventHandler annotation"));
         // check for valid method signature
