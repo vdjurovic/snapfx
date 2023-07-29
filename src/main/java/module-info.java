@@ -7,6 +7,8 @@ module co.bitshifted.snapfx {
     exports co.bitshifted.snapfx.l10n.ui;
     exports co.bitshifted.snapfx.prefs;
     exports co.bitshifted.snapfx.view;
+    exports co.bitshifted.snapfx.eventbus;
+    exports co.bitshifted.snapfx.eventbus.internal to com.google.guice;
 
     requires java.base;
     requires java.prefs;

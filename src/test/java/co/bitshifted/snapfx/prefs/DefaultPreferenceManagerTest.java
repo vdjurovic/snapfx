@@ -1,6 +1,7 @@
 package co.bitshifted.snapfx.prefs;
 
 import co.bitshifted.snapfx.di.DefaultApplicationConfig;
+import co.bitshifted.snapfx.prefs.DefaultPreferenceManager;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

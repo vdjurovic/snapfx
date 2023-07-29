@@ -21,4 +21,9 @@ public class DefaultApplicationConfig implements ApplicationConfig{
     public List<Locale> supportedLocales() {
         return List.of(Locale.ENGLISH);
     }
+
+    @Override
+    public boolean eventBusEnabled() {
+        return false;
+    }
 }
