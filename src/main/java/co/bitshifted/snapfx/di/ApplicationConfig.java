@@ -8,4 +8,5 @@ public interface ApplicationConfig {
     String defaultPreferenceRootNode();
     String preferredLocale();
     List<Locale> supportedLocales();
+    boolean eventBusEnabled();
 }

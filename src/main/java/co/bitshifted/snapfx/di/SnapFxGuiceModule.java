@@ -1,6 +1,8 @@
 package co.bitshifted.snapfx.di;
 
 import co.bitshifted.snapfx.NamedValues;
+import co.bitshifted.snapfx.annotations.EventBusSubscriptionHandler;
+import co.bitshifted.snapfx.error.ConfigurationException;
 import co.bitshifted.snapfx.error.ModelLoadException;
 import co.bitshifted.snapfx.annotations.FxEventHandler;
 import co.bitshifted.snapfx.annotations.FxListener;
@@ -29,16 +31,23 @@ import java.util.function.Consumer;
 public class SnapFxGuiceModule extends AbstractModule {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SnapFxGuiceModule.class);
+    private ApplicationConfig applicationConfig;
 
+    public SnapFxGuiceModule() {
+        this.applicationConfig = applicationConfig();
+    }
 
     @Override
     protected final void configure() {
-        bind(ApplicationConfig.class).toInstance(applicationConfig());
+        bind(ApplicationConfig.class).toInstance(applicationConfig);
         bind(PreferenceManager.class).to(DefaultPreferenceManager.class).in(Scopes.SINGLETON);
         bind(FxViewLoader.class).to(DefaultFxViewLoader.class).in(Scopes.SINGLETON);
         bind(LocaleManager.class).to(DefaultLocaleManager.class).in(Scopes.SINGLETON);
         bind(ResourceBundleManager.class).to(DefaultResourceBundleManager.class).in(Scopes.SINGLETON);
-        bind(EventBus.class).to(DefaultEVentBus.class).in(Scopes.SINGLETON);
+        if(applicationConfig.eventBusEnabled()) {
+            bind(EventBus.class).to(DefaultEVentBus.class).in(Scopes.SINGLETON);
+        }
+
         // UI components and utils
         bind(new TypeLiteral<Consumer<ComboBox<Locale>>>(){})
                 .annotatedWith(Names.named(NamedValues.LOCALE_COMBO_INITIALIZER)).to(LocaleComboBoxInitializer.class);
@@ -50,6 +59,11 @@ public class SnapFxGuiceModule extends AbstractModule {
         bindListeners(listeners());
         // bind model
         models().forEach(m -> bindModelData(m));
+        // bind even bus handlers
+        if(applicationConfig.eventBusEnabled()) {
+            bindEventBusSubscriptionHandlers();
+        }
+
         // bind custom bindings
         customBindings();
 
@@ -66,6 +80,10 @@ public class SnapFxGuiceModule extends AbstractModule {
     protected List<Class> listeners() {return List.of(); }
 
     protected  List<Object> models() {
+        return List.of();
+    }
+
+    protected List<Class> eventBusSubscriptionHandlers() {
         return List.of();
     }
 
@@ -124,6 +142,24 @@ public class SnapFxGuiceModule extends AbstractModule {
             }
 
         }
+    }
+
+    private void bindEventBusSubscriptionHandlers() {
+        var handlers = eventBusSubscriptionHandlers();
+        handlers.forEach(h -> {
+            var annotation = (EventBusSubscriptionHandler)h.getAnnotation(EventBusSubscriptionHandler.class);
+            boolean isSingleton = false;
+            if(annotation != null) {
+                isSingleton = annotation.singleton();
+            } else {
+                throw new ConfigurationException("No @EventBusSubscriptionHandler annotation found for handler class " + h.getName());
+            }
+            if(isSingleton) {
+                bind(h).in(Scopes.SINGLETON);
+            } else {
+                bind(h);
+            }
+        });
     }
 
 }
