@@ -1,4 +1,4 @@
-package co.bitshifted.snapfx.test.prefs;
+package co.bitshifted.snapfx.prefs;
 
 import co.bitshifted.snapfx.di.DefaultApplicationConfig;
 import co.bitshifted.snapfx.prefs.DefaultPreferenceManager;

@@ -1,4 +1,4 @@
-package co.bitshifted.snapfx.test.eventbus;
+package co.bitshifted.snapfx.eventbus;
 
 
 import co.bitshifted.snapfx.annotations.EventBusSubscriptionHandler;
