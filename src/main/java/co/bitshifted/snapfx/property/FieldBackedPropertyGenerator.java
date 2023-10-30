@@ -14,7 +14,7 @@ public final class FieldBackedPropertyGenerator {
     }
 
     public static IntegerFieldProperty integerFieldProperty(Supplier<Integer> supplier, Consumer<Integer> consumer) {
-        return new IntegerFieldProperty(supplier, consumer);
+        return new IntegerFieldProperty(supplier, fromIntegerConsumer(consumer));
     }
 
     public static BooleanFieldProperty booleanFieldProperty(Supplier<Boolean> supplier, Consumer<Boolean> consumer) {
@@ -22,14 +22,26 @@ public final class FieldBackedPropertyGenerator {
     }
 
     public static DoubleFieldProperty doubleFieldProperty(Supplier<Double> supplier, Consumer<Double> consumer) {
-        return new DoubleFieldProperty(supplier, consumer);
+        return new DoubleFieldProperty(supplier, fromDoubleConsumer(consumer));
     }
 
     public static FloatFieldProperty floatFieldProperty(Supplier<Float> supplier, Consumer<Float> consumer) {
-        return new FloatFieldProperty(supplier, consumer);
+        return new FloatFieldProperty(supplier, fromFloatConsumer(consumer));
     }
 
      public static <T> ObjectFieldProperty<T>  objectFieldProperty(Supplier<T> supplier, Consumer<T> consumer) {
         return new ObjectFieldProperty<T>(supplier, consumer);
+    }
+
+    private static Consumer<Number> fromIntegerConsumer(Consumer<Integer> c) {
+        return number -> c.accept(number.intValue());
+    }
+
+    private static Consumer<Number> fromFloatConsumer(Consumer<Float> c) {
+        return number -> c.accept(number.floatValue());
+    }
+
+    private static Consumer<Number> fromDoubleConsumer(Consumer<Double> c) {
+        return number -> c.accept(number.doubleValue());
     }
 }
