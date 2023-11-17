@@ -16,4 +16,15 @@ public class DefaultEventBusTest {
         Thread.sleep(500);
         Assertions.assertEquals(1, receiver.getCount());
     }
+
+    void multipleEventHandlersTest() throws Exception{
+        var receiver = new EventReceiver();
+        eventBus.subscribe(receiver, TestEvent.class);
+        eventBus.subscribe(receiver, FooEvent.class);
+        eventBus.publishEvent(new TestEvent("test"));
+        eventBus.publishEvent(new FooEvent("bar"));
+        Thread.sleep(500);
+        Assertions.assertEquals(1, receiver.getCount());
+        Assertions.assertEquals(1, receiver.getFooCount());
+    }
 }
