@@ -3,12 +3,18 @@ package co.bitshifted.snapfx.eventbus.internal;
 import co.bitshifted.snapfx.annotations.EventBusSubscriptionHandler;
 import co.bitshifted.snapfx.eventbus.Event;
 import co.bitshifted.snapfx.eventbus.EventBus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DefaultEVentBus implements EventBus {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultEVentBus.class);
 
     private static final int BUFFER_MAX_CAPACITY = 16;
     private static final ExecutorService EXECUTOR_SERVICE;
@@ -57,16 +63,23 @@ public class DefaultEVentBus implements EventBus {
 
     private Method getEventHandlerMethod(Object receiver, Class eventClass) {
         var methods = receiver.getClass().getDeclaredMethods();
-        var method = Stream.of(methods)
+        var annotatedMethods = Stream.of(methods)
                 .filter(m -> m.isAnnotationPresent(EventBusSubscriptionHandler.class))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Failed to find @EventHandler annotation"));
-        // check for valid method signature
-        var params = method.getParameterTypes();
-        if(params.length == 1 && params[0].equals(eventClass)) {
-            return method;
-        } else {
-            throw new IllegalArgumentException("Invalid method signature for event handler method. Expecting single argument of event type");
+                .collect(Collectors.toList());
+        if(annotatedMethods.isEmpty()) {
+            throw new IllegalStateException("Failed to find @EventHandler annotation");
         }
+        LOGGER.debug("Annotated handler methods for event class {}", eventClass);
+        // check for valid method signature
+        return  annotatedMethods.stream()
+                .filter(m -> isValidHandlerMethod(m, eventClass))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid method signature for event handler method. Expecting single argument of event type"));
     }
+
+    private boolean isValidHandlerMethod(Method method, Class eventClass) {
+        var params = method.getParameterTypes();
+        return params.length == 1 && params[0].equals(eventClass);
+    }
+
 }
