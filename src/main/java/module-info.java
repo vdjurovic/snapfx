@@ -10,6 +10,7 @@ module co.bitshifted.snapfx {
     exports co.bitshifted.snapfx.service;
     exports co.bitshifted.snapfx.eventbus;
     exports co.bitshifted.snapfx.property;
+    exports co.bitshifted.snapfx.process;
     exports co.bitshifted.snapfx.eventbus.internal to com.google.guice;
 
     requires java.base;
