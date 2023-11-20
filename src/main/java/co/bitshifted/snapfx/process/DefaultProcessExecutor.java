@@ -31,9 +31,8 @@ public class DefaultProcessExecutor implements ProcessExecutor {
     }
 
     @Override
-    public Future<?> executeAndWait(List<String> cmdLine, File workingDirectory, Map<String, String> environment) throws ProcessExecutionException {
-        var process = executeProcessAndWait(cmdLine, workingDirectory, environment);
-        return executorService.submit(new ExecutionThread(process));
+    public Future<Process> executeAndWait(List<String> cmdLine, File workingDirectory, Map<String, String> environment) throws ProcessExecutionException {
+        return executorService.submit(() -> executeProcessAndWait(cmdLine, workingDirectory, environment));
     }
 
     private ProcessExecutionResult executeProcess(List<String> cmdLine, File workingDirectory, Map<String, String> environment) {

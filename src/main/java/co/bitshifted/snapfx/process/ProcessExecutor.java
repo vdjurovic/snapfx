@@ -15,5 +15,5 @@ public interface ProcessExecutor {
 
     Future<ProcessExecutionResult> executeExternalProcess(List<String> cmdLine, File workingDirectory, Map<String, String> environment);
 
-    Future<?> executeAndWait(List<String> cmdLine, File workingDirectory, Map<String, String> environment) throws ProcessExecutionException;
+    Future<Process> executeAndWait(List<String> cmdLine, File workingDirectory, Map<String, String> environment) throws ProcessExecutionException;
 }
