@@ -8,8 +8,11 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -31,8 +34,34 @@ public class DefaultProcessExecutor implements ProcessExecutor {
     }
 
     @Override
-    public Future<Process> executeAndWait(List<String> cmdLine, File workingDirectory, Map<String, String> environment) throws ProcessExecutionException {
+    public Future<Process> executeAndWait(List<String> cmdLine, File workingDirectory, Map<String, String> environment) {
         return executorService.submit(() -> executeProcessAndWait(cmdLine, workingDirectory, environment));
+    }
+
+    @Override
+    public void launchDefaultApplication(Path filePath) throws ProcessExecutionException {
+        launchDefaultApplication(filePath.toFile().getAbsolutePath());
+    }
+
+    @Override
+    public void launchDefaultApplication(URI uri) throws ProcessExecutionException {
+        launchDefaultApplication(uri.toString());
+    }
+
+    private void launchDefaultApplication(String target) throws ProcessExecutionException {
+        var cmdLine = switch (SystemUtils.operatingSystem()) {
+            case LINUX -> List.of("xdg-open", target);
+            case MAC -> List.of("open", target);
+            case WINDOWS -> List.of("start", target);
+        };
+        var result = executeExternalProcess(cmdLine, new File(System.getProperty("user.dir")), Map.of());
+        try {
+            if(result.get().exitCode() != DEFAULT_SUCCESS_EXIT_CODE) {
+                throw new ProcessExecutionException(result.get().stdErr());
+            }
+        } catch(ExecutionException | InterruptedException ex) {
+            throw new ProcessExecutionException(ex);
+        }
     }
 
     private ProcessExecutionResult executeProcess(List<String> cmdLine, File workingDirectory, Map<String, String> environment) {
