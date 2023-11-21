@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
 public class SnapFxGuiceModule extends AbstractModule {
@@ -47,6 +48,10 @@ public class SnapFxGuiceModule extends AbstractModule {
         if(applicationConfig.eventBusEnabled()) {
             bind(EventBus.class).to(DefaultEVentBus.class).in(Scopes.SINGLETON);
         }
+        if (applicationConfig.executorServiceEnabled()) {
+            bind(ExecutorService.class).toInstance(applicationConfig.executorService());
+        }
+
 
         // UI components and utils
         bind(new TypeLiteral<Consumer<ComboBox<Locale>>>(){})
