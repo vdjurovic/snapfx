@@ -1,5 +1,10 @@
 package co.bitshifted.snapfx.property;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 public class FooTest {
     private String stringValue;
     private int intValue;
@@ -7,6 +12,9 @@ public class FooTest {
     private double doubleValue;
     private float floatValue;
     private BarTest barTest;
+    private List<String> listValue;
+    private Set<String> setValue;
+    private Map<Integer,String> mapValue;
 
     public String getStringValue() {
         return stringValue;
@@ -54,5 +62,29 @@ public class FooTest {
 
     public BarTest getBarTest() {
         return barTest;
+    }
+
+    public List<String> getListValue() {
+        return listValue;
+    }
+
+    public void setListValue(List<String> listValue) {
+        this.listValue = listValue;
+    }
+
+    public Set<String> getSetValue() {
+        return setValue;
+    }
+
+    public void setSetValue(Set<String> setValue) {
+        this.setValue = setValue;
+    }
+
+    public Map<Integer, String> getMapValue() {
+        return mapValue;
+    }
+
+    public void setMapValue(Map<Integer, String> mapValue) {
+        this.mapValue = mapValue;
     }
 }
