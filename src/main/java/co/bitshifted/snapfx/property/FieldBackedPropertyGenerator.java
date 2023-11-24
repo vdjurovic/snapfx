@@ -1,5 +1,11 @@
 package co.bitshifted.snapfx.property;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
+
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -32,6 +38,19 @@ public final class FieldBackedPropertyGenerator {
      public static <T> ObjectFieldProperty<T>  objectFieldProperty(Supplier<T> supplier, Consumer<T> consumer) {
         return new ObjectFieldProperty<T>(supplier, consumer);
     }
+
+    public static <T> ListFieldProperty<T>  listFieldProperty(Supplier<ObservableList<T>> supplier, Consumer<ObservableList<T>> consumer) {
+        return new ListFieldProperty<>(supplier, consumer);
+    }
+
+    public static <T> SetFieldProperty<T>  setFieldProperty(Supplier<ObservableSet<T>> supplier, Consumer<ObservableSet<T>> consumer) {
+        return new SetFieldProperty<>(supplier, consumer);
+    }
+
+    public static <K,V> MapFieldProperty<K,V>  mapFieldProperty(Supplier<ObservableMap<K,V>> supplier, Consumer<ObservableMap<K,V>> consumer) {
+        return new MapFieldProperty<>(supplier, consumer);
+    }
+
 
     private static Consumer<Number> fromIntegerConsumer(Consumer<Integer> c) {
         return number -> c.accept(number.intValue());

@@ -1,9 +1,15 @@
 package co.bitshifted.snapfx.property;
 
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -107,6 +113,114 @@ public class FieldBackedPropertyGeneratorTest {
         var bazz = new BarTest("bazz");
         objBackedProperty.set(bazz);
         assertEquals("bazz", objProperty.get().getBar());
+    }
+
+    @Test
+    void testListBindings() {
+        var foo = new FooTest();
+        var listProperty = new SimpleListProperty<String>();
+        ObservableList<String> obSList = foo.getListValue() != null ? FXCollections.observableList(foo.getListValue()) : FXCollections.observableArrayList();
+        var listBackedProperty = FieldBackedPropertyGenerator.listFieldProperty(
+                () -> obSList, value -> foo.setListValue(value));
+
+        var listArg = new ArrayList<String>();
+        listArg.add("foo");
+        var listArg1 = new ArrayList<String>();
+        listArg1.add("bar");
+
+        listProperty.bindBidirectional(listBackedProperty);
+        assertEquals(0, listProperty.get().size());
+        listProperty.set(FXCollections.observableList(listArg));
+        assertEquals(1, listBackedProperty.get().size());
+        assertEquals("foo", listBackedProperty.get().get(0));
+        assertEquals(1, foo.getListValue().size());
+        assertEquals("foo", foo.getListValue().get(0));
+        listBackedProperty.set(FXCollections.observableList(listArg1));
+        assertEquals(1, listProperty.get().size());
+        assertEquals("bar", listProperty.get().get(0));
+        // test appending to list
+        listProperty.add("baz");
+        assertEquals(2, listBackedProperty.get().size());
+        assertEquals("baz", listBackedProperty.get().get(1));
+        assertEquals(2, foo.getListValue().size());
+        assertEquals("baz", foo.getListValue().get(1));
+
+        listBackedProperty.add("barz");
+        assertEquals(3, listProperty.get().size());
+        assertEquals("barz", listProperty.get().get(2));
+        assertEquals("barz", foo.getListValue().get(2));
+    }
+
+    @Test
+    void testSetBindings() {
+        var foo = new FooTest();
+        var setProperty = new SimpleSetProperty<String>();
+        ObservableSet<String> obsSet = foo.getSetValue() != null ? FXCollections.observableSet(foo.getSetValue()) : FXCollections.emptyObservableSet();
+        var setBackedProperty = FieldBackedPropertyGenerator.setFieldProperty(
+                () -> obsSet, value -> foo.setSetValue(value));
+
+        var setArg = new HashSet<String>();
+        setArg.add("foo");
+        var setArrg1 = new HashSet<String>();
+        setArrg1.add("bar");
+
+        setProperty.bindBidirectional(setBackedProperty);
+        assertEquals(0, setProperty.get().size());
+        setProperty.set(FXCollections.observableSet(setArg));
+        assertEquals(1, setBackedProperty.get().size());
+        assertTrue(setBackedProperty.get().contains("foo"));
+        assertEquals(1, foo.getSetValue().size());
+        assertTrue( foo.getSetValue().contains("foo"));
+        setBackedProperty.set(FXCollections.observableSet(setArrg1));
+        assertEquals(1, setProperty.get().size());
+        assertTrue(setProperty.get().contains("bar"));
+        // test appending to set
+        setProperty.add("baz");
+        assertEquals(2, setBackedProperty.get().size());
+        assertTrue( setBackedProperty.get().contains("baz"));
+        assertEquals(2, foo.getSetValue().size());
+        assertTrue( foo.getSetValue().contains("baz"));
+
+        setBackedProperty.add("barz");
+        assertEquals(3, setProperty.get().size());
+        assertTrue( setProperty.get().contains("barz"));
+        assertTrue( foo.getSetValue().contains("barz"));
+    }
+
+    @Test
+    void testMapBindings() {
+        var foo = new FooTest();
+        var mapProperty = new SimpleMapProperty<Integer,String>();
+        ObservableMap<Integer, String> obsMap = foo.getMapValue() != null ? FXCollections.observableMap(foo.getMapValue()) : FXCollections.emptyObservableMap();
+        var mapBackedProperty = FieldBackedPropertyGenerator.mapFieldProperty(
+                () -> obsMap, value -> foo.setMapValue(value));
+
+        var mapArg = new HashMap<Integer,String>();
+        mapArg.put(1,"foo");
+        var mapArg1 = new HashMap<Integer, String>();
+        mapArg1.put(1, "bar");
+
+        mapProperty.bindBidirectional(mapBackedProperty);
+        assertEquals(0, mapProperty.get().size());
+        mapProperty.set(FXCollections.observableMap(mapArg));
+        assertEquals(1, mapBackedProperty.get().size());
+        assertTrue(mapBackedProperty.get().containsKey(1));
+        assertEquals("foo", mapBackedProperty.get(1));
+        assertEquals(1, foo.getMapValue().size());
+        assertTrue( foo.getMapValue().containsKey(1));
+        assertEquals("foo", foo.getMapValue().get(1));
+        mapBackedProperty.set(FXCollections.observableMap(mapArg1));
+        assertEquals(1, mapProperty.get().size());
+        assertTrue(mapProperty.get().containsKey(1));
+        assertEquals("bar", mapProperty.get(1));
+        // test adding to map
+        mapProperty.put(2, "baz");
+        assertEquals(2, mapBackedProperty.get().size());
+        assertTrue( mapBackedProperty.get().containsKey(2));
+        assertEquals("baz", mapBackedProperty.get(2));
+        assertEquals(2, foo.getMapValue().size());
+        assertTrue( foo.getMapValue().containsKey(2));
+        assertEquals("baz", foo.getMapValue().get(2));
     }
 
     @Test
@@ -266,4 +380,72 @@ public class FieldBackedPropertyGeneratorTest {
         objBackedProperty.set(baz2);
         assertEquals("baz2", objProperty.get().getBar());
     }
+
+    @Test
+    void testListBindingsUnidirectional() {
+        var foo = new FooTest();
+
+        ObservableList<String> obSList = foo.getListValue() != null ? FXCollections.observableList(foo.getListValue()) : FXCollections.observableArrayList();
+        var listProperty = new SimpleListProperty<String>();
+        var listBackedProperty = FieldBackedPropertyGenerator.listFieldProperty(
+                () -> obSList, value -> foo.setListValue(value));
+
+        var listArg = new ArrayList<String>();
+        listArg.add("foo");
+
+
+        listProperty.bind(listBackedProperty);
+        assertEquals(0, listProperty.get().size());
+        listBackedProperty.set(FXCollections.observableList(listArg));
+        assertEquals(1, listProperty.get().size());
+        assertEquals("foo", listProperty.get(0));
+        listBackedProperty.add("bar");
+        assertEquals(2, listProperty.get().size());
+        assertEquals("bar", listProperty.get(1));
+        listProperty.unbind();
+
+        // test inverted binding
+        listBackedProperty.bind(listProperty);
+        listProperty.clear();
+        assertEquals(0, listBackedProperty.get().size());
+        listProperty.add("baz");
+        assertEquals(1, listProperty.get().size());
+        assertEquals("baz", listProperty.get(0));
+    }
+
+    @Test
+    void testSetBindingsUnidirectional() {
+        var foo = new FooTest();
+
+        ObservableSet<String> obsSet = foo.getSetValue() != null ? FXCollections.observableSet(foo.getSetValue()) : FXCollections.observableSet();
+        var setProperty = new SimpleSetProperty<String>();
+        var setBackedProperty = FieldBackedPropertyGenerator.setFieldProperty(
+                () -> obsSet, value -> foo.setSetValue(value));
+
+        var setArg = new HashSet<String>();
+        setArg.add("foo");
+
+
+        setProperty.bind(setBackedProperty);
+        assertEquals(0, setProperty.get().size());
+        setBackedProperty.set(FXCollections.observableSet(setArg));
+        assertEquals(1, setProperty.get().size());
+        assertTrue( setProperty.contains("foo"));
+        setBackedProperty.add("bar");
+        assertEquals(2, setProperty.get().size());
+        assertTrue(setProperty.contains("bar"));
+        setProperty.unbind();
+
+        // test inverted binding
+        setBackedProperty.bind(setProperty);
+        setProperty.clear();
+        assertEquals(0, setBackedProperty.get().size());
+        setProperty.add("baz");
+        assertEquals(1, setBackedProperty.get().size());
+        assertTrue(setBackedProperty.contains("baz"));
+        setProperty.addAll(Set.of("1", "2"));
+        assertEquals(3, setBackedProperty.get().size());
+
+    }
+
 }
