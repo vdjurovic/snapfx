@@ -1,7 +1,5 @@
 package co.bitshifted.snapfx.prefs;
 
-import javafx.beans.property.IntegerProperty;
-
 import java.io.Serializable;
 import java.util.Collection;
 

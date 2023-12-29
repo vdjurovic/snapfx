@@ -18,7 +18,7 @@ import java.util.prefs.Preferences;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DefaultPreferenceManagerTest {
+class DefaultPreferenceManagerTest {
 
     private String rootNode;
 

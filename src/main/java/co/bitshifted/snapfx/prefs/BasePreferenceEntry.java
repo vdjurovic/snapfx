@@ -1,8 +1,6 @@
 package co.bitshifted.snapfx.prefs;
 
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Optional;
 import java.util.prefs.Preferences;

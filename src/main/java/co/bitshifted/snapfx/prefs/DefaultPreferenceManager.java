@@ -1,15 +1,12 @@
 package co.bitshifted.snapfx.prefs;
 
 import co.bitshifted.snapfx.di.ApplicationConfig;
-import co.bitshifted.snapfx.di.DefaultApplicationConfig;
 import jakarta.inject.Inject;
-import javafx.beans.property.SimpleIntegerProperty;
 
 import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class DefaultPreferenceManager implements PreferenceManager {
