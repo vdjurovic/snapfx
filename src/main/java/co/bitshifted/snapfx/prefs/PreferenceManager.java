@@ -2,6 +2,9 @@ package co.bitshifted.snapfx.prefs;
 
 import javafx.beans.property.IntegerProperty;
 
+import java.io.Serializable;
+import java.util.Collection;
+
 public interface PreferenceManager {
 
     IntegerPreferenceEntry getIntegerPreference(String root, String name, Integer defaultValue);
@@ -23,5 +26,9 @@ public interface PreferenceManager {
     BooleanPreferenceEntry getBooleanPreferenceEntry(String root, String name, Boolean defaultValue);
 
     BooleanPreferenceEntry getBooleanPreferenceEntry( String name, Boolean defaultValue);
+
+    <T extends Serializable>  MultiValuePreferenceEntry<T> getMultiValuePreferenceEntry(String root, String name, Collection<T> defaultValue);
+
+    <T extends Serializable>  MultiValuePreferenceEntry<T> getMultiValuePreferenceEntry(String name, Collection<T> defaultValue);
 
 }

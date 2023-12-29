@@ -5,6 +5,8 @@ import co.bitshifted.snapfx.di.DefaultApplicationConfig;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleIntegerProperty;
 
+import java.io.*;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
@@ -109,6 +111,40 @@ public class DefaultPreferenceManager implements PreferenceManager {
     @Override
     public BooleanPreferenceEntry getBooleanPreferenceEntry(String name, Boolean defaultValue) {
         return getBooleanPreferenceEntry(applicationConfig.defaultPreferenceRootNode(), name, defaultValue);
+    }
+
+    @Override
+    public <T extends Serializable> MultiValuePreferenceEntry<T> getMultiValuePreferenceEntry(String root, String name, Collection<T> defaultValue) {
+        var key = root + "-" + name;
+        var cached = preferenceCache.get(key);
+        if(cached != null) {
+            return (MultiValuePreferenceEntry<T>) cached;
+        }
+
+        var node = Preferences.userRoot().node(root);
+        var value = node.getByteArray(name, getObjectBytes(defaultValue));
+        try(var ois = new ObjectInputStream(new ByteArrayInputStream(value))) {
+            var pref = new MultiValuePreferenceEntry<>(root, name,  (Collection<T>) ois.readObject());
+            preferenceCache.put(key, pref);
+            return pref;
+        } catch(IOException | ClassNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    @Override
+    public <T extends Serializable> MultiValuePreferenceEntry<T> getMultiValuePreferenceEntry(String name, Collection<T> defaultValue) {
+        return getMultiValuePreferenceEntry(applicationConfig.defaultPreferenceRootNode(), name, defaultValue);
+    }
+
+    private byte[] getObjectBytes(Collection object) {
+        var bytes = new ByteArrayOutputStream();
+        try(var oos = new ObjectOutputStream(bytes)) {
+            oos.writeObject(object);
+            return bytes.toByteArray();
+        } catch(IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 }
