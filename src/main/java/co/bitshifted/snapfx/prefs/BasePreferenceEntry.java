@@ -1,8 +1,6 @@
 package co.bitshifted.snapfx.prefs;
 
 import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Optional;
 import java.util.prefs.Preferences;
@@ -34,7 +32,6 @@ public abstract  class BasePreferenceEntry<T>  implements PendingValuePreference
 
     @Override
     public void save() {
-        System.out.println("Saving value from property");
         if(pendingValue.isPresent()) {
             property.setValue(pendingValue.get());
             pendingValue = Optional.empty();
@@ -43,8 +40,6 @@ public abstract  class BasePreferenceEntry<T>  implements PendingValuePreference
     }
 
     public void save(T value) {
-        System.out.println("Saving boolean value with name " + name + " and value " + value);
-        System.out.println("Root node: " + baseNode.name());
         if(pendingValue.isPresent()) {
             pendingValue = Optional.empty();
         }
