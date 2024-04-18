@@ -3,8 +3,10 @@ module co.bitshifted.snapfx {
     exports co.bitshifted.snapfx.annotations;
     exports co.bitshifted.snapfx.di;
     exports co.bitshifted.snapfx.error;
+    exports co.bitshifted.snapfx.handlers;
     exports co.bitshifted.snapfx.l10n;
     exports co.bitshifted.snapfx.l10n.ui;
+    exports co.bitshifted.snapfx.listeners;
     exports co.bitshifted.snapfx.prefs;
     exports co.bitshifted.snapfx.view;
     exports co.bitshifted.snapfx.service;
