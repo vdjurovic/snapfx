@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface EventBusSubscriptionHandler {
-    boolean singleton() default true;
+  boolean singleton() default true;
 }

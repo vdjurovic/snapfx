@@ -2,9 +2,7 @@ package co.bitshifted.snapfx;
 
 public final class NamedValues {
 
-    private NamedValues() {
+  private NamedValues() {}
 
-    }
-
-    public static final String LOCALE_COMBO_INITIALIZER = "LocaleComboBoxInitializer";
+  public static final String LOCALE_COMBO_INITIALIZER = "LocaleComboBoxInitializer";
 }

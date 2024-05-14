@@ -38,9 +38,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:bitshifted/reflex.git</connection>
-        <developerConnection>scm:git:git@github.com:bitshifted/reflex.git</developerConnection>
-        <url>https://github.com/bitshifted/reflex</url>
+        <connection>scm:git:git@github.com:bitshifted/snapx.git</connection>
+        <developerConnection>scm:git:git@github.com:bitshifted/snapfx.git</developerConnection>
+        <url>https://github.com/bitshifted/snapfx</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -50,29 +50,25 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <!-- dependency versions -->
-<!--        <jackson.version>2.13.3</jackson.version>-->
         <javafx.version>17.0.1</javafx.version>
         <junit.version>5.9.2</junit.version>
         <wiremock.version>2.35.0</wiremock.version>
         <mockito.version>5.4.0</mockito.version>
         <slf4j.version>1.7.36</slf4j.version>
         <guice.version>7.0.0</guice.version>
-<!--        <gson.version>2.10.1</gson.version>-->
-<!--        <jaxb.api.version>4.0.0</jaxb.api.version>-->
-<!--        <jaxb.impl.version>4.0.2</jaxb.impl.version>-->
         <!-- Maven plugin versions -->
-        <maven-clean-plugin.version>3.2.0</maven-clean-plugin.version>
+        <maven-clean-plugin.version>3.3.2</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
-        <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-install-plugin.version>3.0.1</maven-install-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.2.5</maven-failsafe-plugin.version>
+        <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version>
+        <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
         <maven-site-plugin.version>3.12.1</maven-site-plugin.version>
-        <maven-deploy-plugin.version>3.0.0</maven-deploy-plugin.version>
-        <jacoco.plugin.version>0.8.11</jacoco.plugin.version>
+        <maven-deploy-plugin.version>3.1.2</maven-deploy-plugin.version>
+        <jacoco.plugin.version>0.8.12</jacoco.plugin.version>
         <flatten-maven-plugin.version>1.4.1</flatten-maven-plugin.version>
-        <spotless.version>2.36.0</spotless.version>
+        <spotless.version>2.43.0</spotless.version>
     </properties>
 
     <dependencyManagement>
@@ -316,7 +312,7 @@
                                 <include>src/test/java/**/*.java</include>
                             </includes>
                             <googleJavaFormat>
-                                <version>1.15.0</version>
+                                <version>1.17.0</version>
                                 <style>GOOGLE</style>
                             </googleJavaFormat>
                         </java>

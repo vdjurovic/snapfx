@@ -4,5 +4,5 @@ import co.bitshifted.snapfx.error.InitializationException;
 
 public interface Initializer {
 
-    void initializeModel() throws InitializationException;
+  void initializeModel() throws InitializationException;
 }

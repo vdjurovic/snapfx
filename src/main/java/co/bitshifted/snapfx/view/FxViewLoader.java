@@ -5,9 +5,9 @@ import javafx.scene.Node;
 
 public interface FxViewLoader {
 
-    Node loadView(FxViewAware view) throws ViewLoadException;
+  Node loadView(FxViewAware view) throws ViewLoadException;
 
-    Node loadView(Object viewObject) throws ViewLoadException;
+  Node loadView(Object viewObject) throws ViewLoadException;
 
-    <T extends Node> T loadView(Object viewObject, Class<T> viewType) throws ViewLoadException;
+  <T extends Node> T loadView(Object viewObject, Class<T> viewType) throws ViewLoadException;
 }

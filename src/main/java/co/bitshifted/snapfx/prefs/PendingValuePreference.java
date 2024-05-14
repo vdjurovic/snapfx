@@ -2,11 +2,11 @@ package co.bitshifted.snapfx.prefs;
 
 public interface PendingValuePreference<T> {
 
-    void setPendingValue(T value);
+  void setPendingValue(T value);
 
-     boolean hasPendingValue();
+  boolean hasPendingValue();
 
-    void clearPendingValue();
+  void clearPendingValue();
 
-    void save();
+  void save();
 }

@@ -6,10 +6,15 @@ import java.util.concurrent.ExecutorService;
 
 public interface ApplicationConfig {
 
-    String defaultPreferenceRootNode();
-    String preferredLocale();
-    List<Locale> supportedLocales();
-    boolean eventBusEnabled();
-    boolean executorServiceEnabled();
-    ExecutorService executorService();
+  String defaultPreferenceRootNode();
+
+  String preferredLocale();
+
+  List<Locale> supportedLocales();
+
+  boolean eventBusEnabled();
+
+  boolean executorServiceEnabled();
+
+  ExecutorService executorService();
 }

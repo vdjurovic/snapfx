@@ -6,6 +6,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 public @interface FxListener {
-    String name() default "";
-    boolean singleton() default true;
+  String name() default "";
+
+  boolean singleton() default true;
 }
